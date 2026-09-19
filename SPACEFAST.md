@@ -2,12 +2,21 @@
 
 The public site is fully static. Every page is prerendered to HTML at build time.
 
-| Setting                 | Value                                              |
-| ----------------------- | -------------------------------------------------- |
-| Install command         | `bun install`                                      |
-| Build command           | `vite build && node scripts/copy-static-output.mjs` |
-| Static output directory | `dist/client`                                      |
-| Raw Nitro output        | `.output/public` (copied into `dist/client`)        |
+| Setting                 | Value                                                              |
+| ----------------------- | ------------------------------------------------------------------ |
+| Install command         | `bun install`                                                      |
+| Build command           | `STATIC_EXPORT=1 vite build && node scripts/copy-static-output.mjs` |
+| Static output directory | `dist/client`                                                      |
+
+`STATIC_EXPORT=1` is what turns the prerender pass on. Without it the build
+produces the Cloudflare Worker bundle Lovable publishes (the two are mutually
+exclusive — prerendering renders pages through a Node preview server the worker
+build does not emit). `bun run build:static` runs the same command.
+
+This project emits the prerendered files straight into `dist/client`; the
+post-build script copies `.output/public` into `dist/client` if a future
+toolchain version writes there instead, and otherwise reports there is nothing
+to copy.
 
 Node 20+ or Bun 1.1+ is required. `npm ci` works in place of `bun install`.
 
