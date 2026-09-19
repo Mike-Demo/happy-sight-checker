@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://scan.mikedemo.one/sitemap.xml
