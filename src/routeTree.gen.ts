@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LicensesRouteImport } from './routes/licenses'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicAuditRouteImport } from './routes/api/public/audit'
 import { Route as Char91__mockupChar93PreviewSplatRouteImport } from './routes/[__mockup].preview.$'
 import { Route as Char91__componentChar93PreviewSplatRouteImport } from './routes/[__component].preview.$'
 
@@ -22,6 +23,11 @@ const LicensesRoute = LicensesRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicAuditRoute = ApiPublicAuditRouteImport.update({
+  id: '/api/public/audit',
+  path: '/api/public/audit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91__mockupChar93PreviewSplatRoute =
@@ -42,12 +48,14 @@ export interface FileRoutesByFullPath {
   '/licenses': typeof LicensesRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
   '/__mockup/preview/$': typeof Char91__mockupChar93PreviewSplatRoute
+  '/api/public/audit': typeof ApiPublicAuditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/licenses': typeof LicensesRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
   '/__mockup/preview/$': typeof Char91__mockupChar93PreviewSplatRoute
+  '/api/public/audit': typeof ApiPublicAuditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -55,6 +63,7 @@ export interface FileRoutesById {
   '/licenses': typeof LicensesRoute
   '/__component/preview/$': typeof Char91__componentChar93PreviewSplatRoute
   '/__mockup/preview/$': typeof Char91__mockupChar93PreviewSplatRoute
+  '/api/public/audit': typeof ApiPublicAuditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -63,14 +72,21 @@ export interface FileRouteTypes {
     | '/licenses'
     | '/__component/preview/$'
     | '/__mockup/preview/$'
+    | '/api/public/audit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/licenses' | '/__component/preview/$' | '/__mockup/preview/$'
+  to:
+    | '/'
+    | '/licenses'
+    | '/__component/preview/$'
+    | '/__mockup/preview/$'
+    | '/api/public/audit'
   id:
     | '__root__'
     | '/'
     | '/licenses'
     | '/__component/preview/$'
     | '/__mockup/preview/$'
+    | '/api/public/audit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -78,6 +94,7 @@ export interface RootRouteChildren {
   LicensesRoute: typeof LicensesRoute
   Char91__componentChar93PreviewSplatRoute: typeof Char91__componentChar93PreviewSplatRoute
   Char91__mockupChar93PreviewSplatRoute: typeof Char91__mockupChar93PreviewSplatRoute
+  ApiPublicAuditRoute: typeof ApiPublicAuditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -94,6 +111,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/audit': {
+      id: '/api/public/audit'
+      path: '/api/public/audit'
+      fullPath: '/api/public/audit'
+      preLoaderRoute: typeof ApiPublicAuditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/__mockup/preview/$': {
@@ -119,6 +143,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91__componentChar93PreviewSplatRoute:
     Char91__componentChar93PreviewSplatRoute,
   Char91__mockupChar93PreviewSplatRoute: Char91__mockupChar93PreviewSplatRoute,
+  ApiPublicAuditRoute: ApiPublicAuditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
