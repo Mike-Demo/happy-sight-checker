@@ -1,5 +1,9 @@
 {
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "eslint.config.js"],
+  // The design system's opt-in SSR renderer needs the @awesome.me/webawesome
+  // npm package at runtime. This app does not server-render shadow roots, so
+  // the package is not installed and the module is excluded from typechecking.
+  "exclude": ["src/design-system/*/webawesome/ssr/**"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
