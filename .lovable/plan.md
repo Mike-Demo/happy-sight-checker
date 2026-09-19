@@ -12,9 +12,9 @@ WCAG rules, and shows a structured, WCAGify-style report. No database.
 ## What you'll get
 
 - A home page with a URL input and "Run audit" button.
-- A server-side audit that fetches the page's HTML and runs accessibility
-  checks (powered by axe-core, the industry-standard WCAG engine, run
-  against the fetched HTML with jsdom).
+- A server-side audit that fetches the page's HTML through the Firecrawl
+  connector and runs accessibility checks (powered by axe-core, the
+  industry-standard WCAG engine, run against the fetched HTML with jsdom).
 - A results report grouped by WCAG principle (Perceivable, Operable,
   Understandable, Robust) with:
   - Score summary (passes / violations / incomplete, by impact: critical,
@@ -27,8 +27,12 @@ WCAG rules, and shows a structured, WCAGify-style report. No database.
 
 ## Technical details
 
+- Page fetching: Firecrawl connector (Firebase has no page-fetching service;
+  its only connector here sends push notifications). Firecrawl is purpose-built
+  for this — it renders JavaScript-heavy pages and returns full HTML, which a
+  plain fetch cannot do. You'll get a connect card to link it.
 - New server function `src/lib/audit.functions.ts`: validates the URL
-  (http/https only), fetches the HTML with a browser-like user agent, runs
+  (http/https only), requests the rendered HTML from Firecrawl, runs
   `axe-core` inside `jsdom` on the server, and returns a trimmed JSON result
   (rule id, impact, WCAG tags, help URL, failing node snippets). Capped
   response size; private/internal hosts rejected.
