@@ -8,9 +8,15 @@ import { componentTagger } from "lovable-tagger";
 import { mockupPreviewPlugin } from "./mockupPreviewPlugin";
 
 export default defineConfig(({ command, mode }) => {
+  // STATIC_EXPORT=1 builds the prerendered site for static hosting. The
+  // Cloudflare Workers output and the prerender pass are mutually exclusive:
+  // prerendering renders the routes through a Node preview server, which the
+  // worker build does not emit.
+  const staticExport = process.env["STATIC_EXPORT"] === "1";
+
   // Cloudflare Workers plugin only on build (produces the worker output);
   // the workerd runtime isn't available for the dev server.
-  const useCloudflare = command === "build";
+  const useCloudflare = command === "build" && !staticExport;
 
   return {
     server: {
@@ -31,7 +37,7 @@ export default defineConfig(({ command, mode }) => {
         // prerendered to HTML. Discovery is off so the editor preview routes
         // and the audit API route are never prerendered.
         pages: [{ path: "/" }, { path: "/licenses" }],
-        prerender: { enabled: true, autoStaticPathsDiscovery: false },
+        prerender: { enabled: staticExport, autoStaticPathsDiscovery: false },
       }),
       viteReact(),
       ...(mode === "development" ? [componentTagger()] : []),
