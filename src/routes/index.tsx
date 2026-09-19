@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useRef, type FormEvent } from "react";
 
@@ -15,7 +14,7 @@ import {
   WaSpinner,
   WaTag,
 } from "@/design-system/font-awsome-web-awesome-171158";
-import { auditUrl } from "@/lib/audit.functions";
+import { requestAudit } from "@/lib/audit-client";
 import {
   IMPACT_VARIANT,
   PRINCIPLE_LABELS,
@@ -178,10 +177,9 @@ function HomePage() {
   // Web Awesome form controls emit their own DOM events, so the field is read
   // from the element on submit rather than mirrored into React state.
   const inputRef = useRef<HTMLElement & { value?: string }>(null);
-  const runAudit = useServerFn(auditUrl);
 
   const mutation = useMutation({
-    mutationFn: (target: string) => runAudit({ data: { url: target } }),
+    mutationFn: (target: string) => requestAudit(target),
   });
 
   const handleSubmit = (event: FormEvent) => {

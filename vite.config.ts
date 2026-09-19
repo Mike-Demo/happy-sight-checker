@@ -26,7 +26,13 @@ export default defineConfig(({ command, mode }) => {
       mockupPreviewPlugin(),
       tsConfigPaths({ projects: ["./tsconfig.json"] }),
       ...(useCloudflare ? [cloudflare({ viteEnvironment: { name: "ssr" } })] : []),
-      tanstackStart(),
+      tanstackStart({
+        // Every public page is identical for all visitors, so both are
+        // prerendered to HTML. Discovery is off so the editor preview routes
+        // and the audit API route are never prerendered.
+        pages: [{ path: "/" }, { path: "/licenses" }],
+        prerender: { enabled: true, autoStaticPathsDiscovery: false },
+      }),
       viteReact(),
       ...(mode === "development" ? [componentTagger()] : []),
     ],
