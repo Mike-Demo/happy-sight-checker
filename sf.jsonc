@@ -1,0 +1,24 @@
+{
+  "$schema": "https://spacefast.com/schemas/sf.json",
+  "space": "a11y",
+  "name": "A11Y",
+  "index": "index.html",
+  "fallback": {
+    "path": "index.html",
+    "status": 200
+  },
+  "cleanUrls": true,
+  "listing": false,
+  "meta": {
+    "title": "WCAGify — Free WCAG accessibility checker",
+    "description": "Paste any public web address and get a structured WCAG 2.2 accessibility report with violations, success criteria, and fixes.",
+    "favicon": "/favicon.png"
+  },
+  "build": {
+    "rootDirectory": ".",
+    "installCommand": "bun install",
+    "buildCommand": "STATIC_EXPORT=1 vite build && node scripts/copy-static-output.mjs",
+    "outputDirectory": "dist/client",
+    "timeoutSeconds": 900
+  }
+}
