@@ -17,7 +17,7 @@
   "build": {
     "rootDirectory": ".",
     "installCommand": "bun install",
-    "buildCommand": "STATIC_EXPORT=1 vite build && node scripts/copy-static-output.mjs",
+    "buildCommand": "bun run build",
     "outputDirectory": "dist/client",
     "timeoutSeconds": 900
   }
