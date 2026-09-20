@@ -17,16 +17,33 @@ async function isDirectory(dir) {
   }
 }
 
-if (!(await isDirectory(source))) {
-  if (await isDirectory(target)) {
-    console.log("Static output already present at dist/client — nothing to copy.");
-    process.exit(0);
+async function isFile(file) {
+  try {
+    return (await stat(file)).isFile();
+  } catch {
+    return false;
   }
+}
+
+if (await isDirectory(source)) {
+  await rm(target, { recursive: true, force: true });
+  await mkdir(path.dirname(target), { recursive: true });
+  await cp(source, target, { recursive: true });
+  console.log("Copied .output/public -> dist/client");
+} else if (await isDirectory(target)) {
+  console.log("Static output already present at dist/client — nothing to copy.");
+} else {
   console.error("No static output found at .output/public. Run the build first.");
   process.exit(1);
 }
 
-await rm(target, { recursive: true, force: true });
-await mkdir(path.dirname(target), { recursive: true });
-await cp(source, target, { recursive: true });
-console.log("Copied .output/public -> dist/client");
+// A published folder without index.html serves nothing. Fail the build rather
+// than shipping assets with no entry page.
+if (!(await isFile(path.join(target, "index.html")))) {
+  console.error(
+    "dist/client/index.html is missing — the prerender pass did not run. " +
+      "Use the static build (STATIC_EXPORT=1) so pages are emitted as HTML.",
+  );
+  process.exit(1);
+}
+console.log("Verified dist/client/index.html exists.");
