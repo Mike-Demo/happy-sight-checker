@@ -56,3 +56,23 @@ Only the static build (the one that pre-renders the pages to HTML) produces
 The audit itself still runs at request time through the Lovable-hosted endpoint,
 so this project must stay published for audits on the Spacefast site to work.
 That is unchanged by this fix.
+
+### Which domain goes where
+
+One name can only point at one host, so the two sites need two names:
+
+- **Public site (Spacefast):** this is the one people visit. Use the name you
+  want as the brand address — either the Spacefast address `a11y.view.fast`, or
+  point your own name (e.g. `scan.mikedemo.one`) at Spacefast instead of Lovable.
+- **Audit service (Lovable):** stays reachable at its Lovable address
+  `happy-sight-checker.lovable.app`, which is what the public site calls for
+  each audit. If you'd rather it had a friendly name, give it a different
+  subdomain such as `audit.mikedemo.one` and keep that one on Lovable.
+
+Recommended: move `scan.mikedemo.one` to Spacefast for the public site, and
+leave the audit on the Lovable address (no extra DNS work). Either way, the
+audit address the site calls is set once via the `VITE_AUDIT_API_BASE` value in
+Spacefast's settings — so switching it later is a one-line change.
+
+You'll keep editing and previewing here in Lovable exactly as now; the Lovable
+preview always keeps its own address regardless of the domain choice.
