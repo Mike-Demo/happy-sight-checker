@@ -2,21 +2,31 @@
 
 The public site is fully static. Every page is prerendered to HTML at build time.
 
-| Setting                 | Value                                                               |
-| ----------------------- | ------------------------------------------------------------------- |
-| Install command         | `bun install`                                                       |
-| Build command           | `STATIC_EXPORT=1 vite build && node scripts/copy-static-output.mjs` |
-| Static output directory | `dist/client`                                                       |
-| Spacefast space         | `a11y` (`a11y.view.fast`)                                           |
-| Production branch       | `main`                                                              |
+| Setting                 | Value                                     |
+| ----------------------- | ----------------------------------------- |
+| Install command         | `bun install`                             |
+| Build command           | `bun run build`                           |
+| Static output directory | `dist/client`                             |
+| Spacefast space         | `a11y` (`a11y.view.fast`)                 |
+| Production branch       | `main`                                    |
 
-These settings are also recorded in `sf.jsonc`, which Spacefast reads when it
-builds from the connected GitHub repository.
+These settings are recorded in `sf.jsonc`. Spacefast's repository builds have
+been observed reporting `install=auto, build=auto, output=auto`, i.e. detecting
+the commands themselves rather than reading `sf.jsonc` — that is why the default
+`build` script now produces the static site. If a build ever picks something
+else, set the same values manually in the Spacefast dashboard Build settings.
 
-`STATIC_EXPORT=1` is what turns the prerender pass on. Without it the build
-produces the Cloudflare Worker bundle Lovable publishes (the two are mutually
-exclusive — prerendering renders pages through a Node preview server the worker
-build does not emit). `bun run build:static` runs the same command.
+`bun run build` (`scripts/build-all.mjs`) runs two Vite passes, because
+prerendering and the Cloudflare Worker output are mutually exclusive in one pass:
+
+1. `STATIC_EXPORT=1 vite build` — prerenders `/` and `/licenses` to HTML.
+2. `vite build` — emits the Cloudflare Worker that Lovable publishes and that
+   serves `/api/public/audit`.
+
+The prerendered HTML and its hashed assets are merged back into `dist/client`
+after pass 2, so `dist/client` always contains `index.html`. The post-build step
+fails the build if it does not. `bun run build:static` runs the static pass only;
+`bun run build:server` runs the worker pass only.
 
 The Wrangler config for the Lovable worker build lives at `deploy/wrangler.jsonc`,
 not the repository root: Spacefast's build pack aborts when it finds a root-level
