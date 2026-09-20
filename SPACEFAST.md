@@ -18,6 +18,13 @@ produces the Cloudflare Worker bundle Lovable publishes (the two are mutually
 exclusive — prerendering renders pages through a Node preview server the worker
 build does not emit). `bun run build:static` runs the same command.
 
+The Wrangler config for the Lovable worker build lives at `deploy/wrangler.jsonc`,
+not the repository root: Spacefast's build pack aborts when it finds a root-level
+`wrangler.jsonc` ("cloudflare-pages: Cloudflare Worker entrypoints are not
+converted"). `vite.config.ts` points the Cloudflare plugin at the relocated file
+via `configPath`, so the Lovable build is unaffected. Keep `wrangler.*`,
+`_worker.js`, and `functions/` out of the root.
+
 This project emits the prerendered files straight into `dist/client`; the
 post-build script copies `.output/public` into `dist/client` if a future
 toolchain version writes there instead, and otherwise reports there is nothing

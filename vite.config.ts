@@ -31,7 +31,11 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       mockupPreviewPlugin(),
       tsConfigPaths({ projects: ["./tsconfig.json"] }),
-      ...(useCloudflare ? [cloudflare({ viteEnvironment: { name: "ssr" } })] : []),
+      // Wrangler config lives in deploy/ (not the root) so static hosts
+      // scanning the repository don't detect a Worker entrypoint.
+      ...(useCloudflare
+        ? [cloudflare({ viteEnvironment: { name: "ssr" }, configPath: "deploy/wrangler.jsonc" })]
+        : []),
       tanstackStart({
         // Every public page is identical for all visitors, so both are
         // prerendered to HTML. Discovery is off so the editor preview routes
