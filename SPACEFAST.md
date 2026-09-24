@@ -65,8 +65,8 @@ sf env set FIRECRAWL_API_KEY --secret --value-from-stdin < ./firecrawl-key.txt
 sf git connect --space a11y --provider github --repository Mike-Demo/happy-sight-checker --production-branch main --sync
 ```
 
-The first command makes the public build-time audit endpoint available to the
-static site. The second connects the GitHub repository to Spacefast, selects
+The first command stores your Firecrawl key for the audit function on
+Spacefast. The second connects the GitHub repository to Spacefast, selects
 `main` as the live branch, and starts the initial sync. The GitHub app
 installation and repository authorization must be completed by the Spacefast
 account owner.
