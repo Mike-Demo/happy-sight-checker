@@ -80,7 +80,7 @@ const SCRAPE_OPTIONS = {
  * running inside Lovable, or directly with the project's own Firecrawl key
  * everywhere else (e.g. a Spacefast function).
  */
-function scrapeRequest(url: string, env: AuditEnv): { endpoint: string; headers: Record<string, string> } {
+function scrapeRequest(env: AuditEnv): { endpoint: string; headers: Record<string, string> } {
   const firecrawlKey = env.FIRECRAWL_API_KEY;
   if (!firecrawlKey) {
     throw new AuditRequestError(
@@ -95,7 +95,6 @@ function scrapeRequest(url: string, env: AuditEnv): { endpoint: string; headers:
       headers: { ...base, Authorization: `Bearer ${env.LOVABLE_API_KEY}`, "X-Connection-Api-Key": firecrawlKey },
     };
   }
-  void url;
   return {
     endpoint: "https://api.firecrawl.dev/v2/scrape",
     headers: { ...base, Authorization: `Bearer ${firecrawlKey}` },
@@ -109,7 +108,7 @@ function scrapeRequest(url: string, env: AuditEnv): { endpoint: string; headers:
  */
 export async function fetchAndAudit(rawUrl: string, env: AuditEnv): Promise<AuditResult> {
   const url = normaliseUrl(rawUrl);
-  const { endpoint, headers } = scrapeRequest(url, env);
+  const { endpoint, headers } = scrapeRequest(env);
 
   let response: Response;
   try {
