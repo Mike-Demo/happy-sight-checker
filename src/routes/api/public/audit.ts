@@ -40,7 +40,11 @@ export const Route = createFileRoute("/api/public/audit")({
 
         const { fetchAndAudit, AuditRequestError } = await import("@/lib/audit-fetch.server");
         try {
-          return json(await fetchAndAudit(parsed.data.url), 200);
+          const env = {
+            LOVABLE_API_KEY: process.env["LOVABLE_API_KEY"],
+            FIRECRAWL_API_KEY: process.env["FIRECRAWL_API_KEY"],
+          };
+          return json(await fetchAndAudit(parsed.data.url, env), 200);
         } catch (cause) {
           if (cause instanceof AuditRequestError) {
             return json({ error: cause.message }, cause.status);

@@ -60,41 +60,63 @@ interface FirecrawlScrapeResponse extends FirecrawlDocument {
   readonly data?: FirecrawlDocument;
 }
 
-/**
- * Fetch a page through the Firecrawl connector and run the WCAG audit on it.
- * Firecrawl renders JavaScript before returning markup, so single-page apps
- * are audited as users actually receive them.
- */
-export async function fetchAndAudit(rawUrl: string): Promise<AuditResult> {
-  const url = normaliseUrl(rawUrl);
+/** Environment values the audit reads. Passed in so any runtime can supply them. */
+export interface AuditEnv {
+  readonly LOVABLE_API_KEY?: string;
+  readonly FIRECRAWL_API_KEY?: string;
+}
 
-  const lovableApiKey = process.env["LOVABLE_API_KEY"];
-  const firecrawlKey = process.env["FIRECRAWL_API_KEY"];
-  if (!lovableApiKey || !firecrawlKey) {
+const SCRAPE_OPTIONS = {
+  formats: ["rawHtml"],
+  onlyMainContent: false,
+  waitFor: 1500,
+  timeout: 45000,
+  blockAds: false,
+  removeBase64Images: true,
+} as const;
+
+/**
+ * Picks how Firecrawl is reached: through the Lovable connector gateway when
+ * running inside Lovable, or directly with the project's own Firecrawl key
+ * everywhere else (e.g. a Spacefast function).
+ */
+function scrapeRequest(url: string, env: AuditEnv): { endpoint: string; headers: Record<string, string> } {
+  const firecrawlKey = env.FIRECRAWL_API_KEY;
+  if (!firecrawlKey) {
     throw new AuditRequestError(
       "Page fetching is not configured yet. Connect Firecrawl and try again.",
       503,
     );
   }
+  const base = { "Content-Type": "application/json" };
+  if (env.LOVABLE_API_KEY) {
+    return {
+      endpoint: "https://connector-gateway.lovable.dev/firecrawl/v2/scrape",
+      headers: { ...base, Authorization: `Bearer ${env.LOVABLE_API_KEY}`, "X-Connection-Api-Key": firecrawlKey },
+    };
+  }
+  void url;
+  return {
+    endpoint: "https://api.firecrawl.dev/v2/scrape",
+    headers: { ...base, Authorization: `Bearer ${firecrawlKey}` },
+  };
+}
+
+/**
+ * Fetch a page through Firecrawl and run the WCAG audit on it.
+ * Firecrawl renders JavaScript before returning markup, so single-page apps
+ * are audited as users actually receive them.
+ */
+export async function fetchAndAudit(rawUrl: string, env: AuditEnv): Promise<AuditResult> {
+  const url = normaliseUrl(rawUrl);
+  const { endpoint, headers } = scrapeRequest(url, env);
 
   let response: Response;
   try {
-    response = await fetch("https://connector-gateway.lovable.dev/firecrawl/v2/scrape", {
+    response = await fetch(endpoint, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${lovableApiKey}`,
-        "X-Connection-Api-Key": firecrawlKey,
-      },
-      body: JSON.stringify({
-        url,
-        formats: ["rawHtml"],
-        onlyMainContent: false,
-        waitFor: 1500,
-        timeout: 45000,
-        blockAds: false,
-        removeBase64Images: true,
-      }),
+      headers,
+      body: JSON.stringify({ url, ...SCRAPE_OPTIONS }),
     });
   } catch (cause) {
     console.error("Firecrawl request failed to send", cause);
