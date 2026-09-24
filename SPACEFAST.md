@@ -80,18 +80,39 @@ Also shipped: `sitemap.xml`, `robots.txt`, `_redirects` (`/*  /index.html  200`,
 so deep links resolve on generic static hosts). Spacefast also receives the
 same fallback natively from `sf.jsonc`.
 
-## Required build-time environment variable
+## Audit function (runs on Spacefast)
 
-| Variable               | Value                                     |
-| ---------------------- | ----------------------------------------- |
-| `VITE_AUDIT_API_BASE`  | `https://happy-sight-checker.lovable.app` |
+The audit runs as a Spacefast Function at `/api/public/audit`, on the same
+origin as the site. Source: `functions-src/api/public/audit.ts`, which reuses
+the same validation and audit engine as the Lovable route. `bun run build`
+bundles it into `dist/client/functions/api/public/audit.mjs`, where Spacefast's
+`functions/` file router picks it up. `sf.jsonc` declares
+`runtime.kind: "functions"` with `fetch: true`, which is required for the
+function to call Firecrawl.
 
-The accessibility audit itself cannot be static: it fetches and analyses the
-submitted page on a server using a private Firecrawl key. That one request runs
-on the Lovable-hosted app, and the static site calls it at
-`$VITE_AUDIT_API_BASE/api/public/audit`. The endpoint sends permissive CORS
-headers, so any origin may call it.
+### Required Spacefast variable
 
-If `VITE_AUDIT_API_BASE` is unset, the site calls `/api/public/audit` on its own
-origin — correct inside Lovable, but on Spacefast audits would fail because no
-server runs there.
+| Variable            | Value                        | Scope              |
+| ------------------- | ---------------------------- | ------------------ |
+| `FIRECRAWL_API_KEY` | your own key from firecrawl.dev | runtime, secret |
+
+```bash
+sf env set FIRECRAWL_API_KEY --secret --value-from-stdin < ./firecrawl-key.txt
+sf env rm VITE_AUDIT_API_BASE   # so the site calls its own function
+```
+
+Then redeploy. Inside Lovable the same code reaches Firecrawl through the
+Lovable connector instead, so the preview needs no change.
+
+### Rollback
+
+Set `VITE_AUDIT_API_BASE=https://happy-sight-checker.lovable.app` (plain, not
+secret) and redeploy: the site calls the Lovable-hosted endpoint again. Keep
+the Lovable app published while this fallback is needed.
+
+### Smoke test after cutover
+
+1. `/` and `/licenses` load.
+2. Auditing `example.com` returns a report.
+3. `192.168.1.1` shows "Only public websites can be audited."
+4. `sf logs runtime --follow` shows no errors.
