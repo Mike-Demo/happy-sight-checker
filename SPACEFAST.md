@@ -61,7 +61,7 @@ After signing in to Spacefast locally, run these commands from the repository
 root:
 
 ```bash
-sf env set VITE_AUDIT_API_BASE "https://happy-sight-checker.lovable.app" --no-secret
+sf env set FIRECRAWL_API_KEY --secret --value-from-stdin < ./firecrawl-key.txt
 sf git connect --space a11y --provider github --repository Mike-Demo/happy-sight-checker --production-branch main --sync
 ```
 
