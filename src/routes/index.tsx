@@ -206,8 +206,9 @@ function HomePage() {
             ref={inputRef}
             label="Website address"
             hint="For example: example.com/pricing"
-            type="url"
-            placeholder="https://example.com"
+            type="text"
+            inputmode="url"
+            placeholder="example.com/pricing"
             name="url"
             required
           />
