@@ -1,0 +1,183 @@
+{
+  "boltSlidesVersion": 1,
+  "boltSlidesId": "11011050-f9d6-4d43-8a9e-3e43af51bbaf",
+  "deck": {
+    "title": "Happy Sight Checker",
+    "transition": "fade",
+    "font": "manrope",
+    "accent": "#38CDEE"
+  },
+  "slides": [
+    {
+      "id": "s1",
+      "position": 0,
+      "layout": "cover",
+      "props": {
+        "kicker": "Happy Sight Checker",
+        "title": "An eye test, but ==for your website==.",
+        "subtitle": "Point it at a page. Get a friendly report card on how it actually looks to real people.",
+        "image": "/hsc-cover.webp",
+        "dim": 0.5,
+        "foot": "scan.mikedemo.one · github.com/Mike-Demo/happy-sight-checker"
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Welcome. Happy Sight Checker is an eye test for websites — it tells you what your site looks like through the eyes of a real visitor, in plain language.",
+      "status": "none"
+    },
+    {
+      "id": "s2",
+      "position": 1,
+      "layout": "statement",
+      "props": {
+        "kicker": "The problem",
+        "title": "Sites quietly ship things ==real visitors struggle to see==.",
+        "body": "Washed-out contrast. Tiny tap targets. Text over busy photos. And when audits catch it, they report it in jargon nobody acts on."
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Everyone has shipped a button they couldn't read in sunlight. The tools see it, but they speak in WCAG codes — so the fixes never happen.",
+      "status": "none"
+    },
+    {
+      "id": "s3",
+      "position": 2,
+      "layout": "poster",
+      "props": {
+        "label": "What it does",
+        "title": "A scan that sees ==how your site actually looks==.",
+        "body": "Point it at a page and it flags sight problems in plain, cheerful language — each one with the fix attached.",
+        "image": "/hsc-scan.webp",
+        "inset": true
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "No spreadsheets of violations. It reads like a friendly note from someone who looked at your site and wants it to do well.",
+      "status": "none"
+    },
+    {
+      "id": "s4",
+      "position": 3,
+      "layout": "steps",
+      "props": {
+        "kicker": "How it works",
+        "title": "The visual basics, ==checked==.",
+        "items": [
+          { "title": "Contrast", "body": "Can every word actually be read against its background?" },
+          { "title": "Legibility", "body": "Is the text big, clear, and sitting on busy photos safely?" },
+          { "title": "Sizing", "body": "Are buttons and tap targets comfortable for real fingers?" },
+          { "title": "Spacing", "body": "Is there room to breathe, or is everything crowded together?" },
+          { "title": "Report card", "body": "A short, friendly write-up instead of a spreadsheet of violations." }
+        ]
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Four checks plus the write-up. It's the eye chart, not the fine print: the basics that decide whether a page is comfortable to look at.",
+      "status": "none"
+    },
+    {
+      "id": "s5",
+      "position": 4,
+      "layout": "contrast",
+      "props": {
+        "kicker": "Happy by design",
+        "title": "Hospitality, ==not homework==.",
+        "left": {
+          "label": "Old-school audits",
+          "title": "A to-do list you dread",
+          "points": [
+            "\"Contrast ratio 2.9:1 fails WCAG 2.1 AA\"",
+            "A wall of numbered violations",
+            "All pass or fail, no nuance",
+            "Fixes buried in the fine print"
+          ]
+        },
+        "right": {
+          "label": "Happy Sight Checker",
+          "title": "A nudge from a friend",
+          "points": [
+            "\"This heading gets shy on dark backgrounds — try a lighter grey\"",
+            "Prioritized fixes, most-visible first",
+            "Celebrates what's already passing",
+            "Encouraging tone throughout"
+          ]
+        }
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "This is the soul of the product. Accessibility framed as hospitality: welcoming people in, not failing a compliance exam.",
+      "status": "none"
+    },
+    {
+      "id": "s6",
+      "position": 5,
+      "layout": "bento",
+      "props": {
+        "kicker": "Key features",
+        "title": "Everything you need, ==nothing you don't==.",
+        "tiles": [
+          { "k": "01", "title": "Plain-language findings", "body": "Every issue explained like a person, with the fix attached.", "variant": "accent" },
+          { "k": "02", "title": "Prioritized fixes", "body": "The most-visible problems surface first — no triage required." },
+          { "k": "03", "title": "Pass list", "body": "A cheerful rundown of what your site is already getting right." },
+          { "k": "04", "title": "Page-level report card", "body": "A short, scannable scorecard instead of a 40-page PDF." },
+          { "k": "05", "title": "Open source", "body": "Read it, run it, fork it — the whole scanner is on GitHub.", "variant": "glow" },
+          { "k": "06", "title": "Live in your browser", "body": "No install, no dashboard to learn. Paste a URL and go." }
+        ]
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "The feature sweep. Emphasize plain language and the pass list — those are what make people come back instead of dreading it.",
+      "status": "none"
+    },
+    {
+      "id": "s7",
+      "position": 6,
+      "layout": "statGrid",
+      "props": {
+        "kicker": "Status",
+        "title": "==Live today==, and open to everyone.",
+        "stats": [
+          { "value": "scan.mikedemo.one", "label": "Live now", "caption": "Try it on any page — paste a URL and get the report card." },
+          { "value": "100% open", "label": "Source on GitHub", "caption": "github.com/Mike-Demo/happy-sight-checker" },
+          { "value": "0 to scan", "label": "Setup time", "caption": "No account, no install — the scanner is the page." },
+          { "value": "WCAG AA", "label": "This deck, too", "caption": "Dark theme, clear-sky accent — it practises what it preaches." }
+        ]
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "It's shipped and public — not a demo. Point at the live URL, then note that the tool itself is open source.",
+      "status": "none"
+    },
+    {
+      "id": "s8",
+      "position": 7,
+      "layout": "cover",
+      "props": {
+        "kicker": "Give your site the eye test",
+        "title": "Scan a page ==today==.",
+        "subtitle": "scan.mikedemo.one — and star the repo if it makes you smile.",
+        "foot": "github.com/Mike-Demo/happy-sight-checker · Mike-Demo"
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Close with the ask: try the scanner on your own site, and star or contribute to the repo.",
+      "status": "none"
+    }
+  ]
+}
