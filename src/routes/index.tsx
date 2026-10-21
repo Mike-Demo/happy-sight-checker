@@ -33,6 +33,8 @@ export const Route = createFileRoute("/")({
           "Paste any public web address and get a structured WCAG 2.2 accessibility report: violations by severity, the success criteria they break, and how to fix each one.",
       },
       { property: "og:title", content: "WCAGify — Free WCAG accessibility checker" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content:
