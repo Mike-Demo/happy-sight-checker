@@ -14,6 +14,8 @@ export const Route = createFileRoute("/licenses")({
           "Licenses and credits for the open source libraries, standards, and services behind the WCAGify accessibility checker.",
       },
       { property: "og:title", content: "Open source & credits — WCAGify" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: "The open source libraries and services that power WCAGify.",

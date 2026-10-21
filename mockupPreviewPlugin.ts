@@ -206,6 +206,7 @@ import {
 } from "react";
 
 import { components } from "@/.generated/mockup-components";
+import { isTrustedPreviewMessageOrigin } from "@/lib/preview-message-origin";
 
 type PreviewEntry = (typeof components)[string];
 type SpecimenProps = Record<string, string | number | boolean>;
@@ -301,6 +302,7 @@ function PreviewDocument({ previewPath }: { previewPath: string }): ReactElement
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
       if (event.source !== parent) return;
+      if (!isTrustedPreviewMessageOrigin(event.origin, window.location.origin)) return;
       const schemaProps = (entryRef.current as { schemaProps?: SchemaProp[] } | null)?.schemaProps ?? [];
       const props = specimenPropsFromMessage(event.data, schemaProps);
       if (!props) return;
@@ -1118,6 +1120,7 @@ export function mockupPreviewPlugin(): Plugin {
     import ${JSON.stringify(APP_CSS_IMPORT)};
 
     const componentRoot = document.getElementById("component-root");
+    const { isTrustedPreviewMessageOrigin } = await import("/src/lib/preview-message-origin.ts");
     const root = ReactDOM.createRoot(componentRoot);
     const baseProps = ${propsLiteral};
     const schemaProps = ${schemaPropsLiteral};
@@ -1217,6 +1220,7 @@ export function mockupPreviewPlugin(): Plugin {
 
     window.addEventListener("message", (event) => {
       if (event.source !== parent) return;
+      if (!isTrustedPreviewMessageOrigin(event.origin, window.location.origin)) return;
       const next = specimenPropsFromMessage(event.data);
       if (!next) return;
       specimenProps = next;
