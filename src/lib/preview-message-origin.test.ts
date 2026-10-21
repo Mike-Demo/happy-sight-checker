@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import { describe, test } from "node:test";
+import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 import { isTrustedPreviewMessageOrigin } from "./preview-message-origin";
@@ -8,13 +9,13 @@ const appOrigin = "http://localhost:8080";
 describe("preview origin policy", () => {
   test("allows the same app and exact HTTPS editor origins", () => {
     for (const origin of [appOrigin, "https://lovable.dev", "https://www.lovable.dev"]) {
-      expect(isTrustedPreviewMessageOrigin(origin, appOrigin)).toBe(true);
+      assert.equal(isTrustedPreviewMessageOrigin(origin, appOrigin), true);
     }
   });
 
   test("rejects hostile embeddings, hosted apps, spoofed domains and opaque origins", () => {
     for (const origin of ["https://attacker.example", "https://evil.lovable.app", "https://evil.lovable.dev", "https://lovable.dev.attacker.example", "http://lovable.dev", "https://lovable.dev:444", "https://lovable.dev/", "null", "", "file://", "javascript:alert(1)"]) {
-      expect(isTrustedPreviewMessageOrigin(origin, appOrigin)).toBe(false);
+      assert.equal(isTrustedPreviewMessageOrigin(origin, appOrigin), false);
     }
   });
 });
@@ -53,9 +54,9 @@ for (const [name, source, pattern] of [
     handle("https://attacker.example", parentWindow);
     handle("null", parentWindow);
     handle("https://lovable.dev", {});
-    expect(renderCalls).toHaveLength(0);
+    assert.equal(renderCalls.length, 0);
     handle("https://lovable.dev", parentWindow);
     handle(appOrigin, parentWindow);
-    expect(renderCalls).toHaveLength(2);
+    assert.equal(renderCalls.length, 2);
   });
 }
